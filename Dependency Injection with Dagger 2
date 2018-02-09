@@ -1,5 +1,5 @@
 Many Android apps rely on instantiating objects that often require other dependencies. For instance, a Twitter API client may be built using a networking library such as Retrofit. To use this library, you might also need to add parsing libraries such as Gson. In addition, classes that implement authentication or caching may require accessing shared preferences or other common storage, requiring instantiating them first and creating an inherent dependency chain.
-
+https://github.com/codepath/android_guides/wiki/Dependency-Injection-with-Dagger-2这是网址的内容。
 If you're not familiar with Dependency Injection, watch this quick video.
 
 Dagger 2 analyzes these dependencies for you and generates code to help wire them together. 
