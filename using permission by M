@@ -1,0 +1,35 @@
+感觉比较简单易用的，基于8.0的权限管理。
+但是有一点不好的，如果用户手动关闭了权限，那么就不能再次启动了，只能得到回掉的函数的结果。
+1.获取了，做相应的操作；
+2.未获取，做相应的操作；
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        PermissionGen.with(this)
+                .addRequestCode(100)
+                .permissions(Manifest.permission.CAMERA,Manifest.permission.RECEIVE_SMS)
+                .request();
+    }
+    @PermissionSuccess(requestCode = 100)
+    public void test(){
+        Toast.makeText(this,"获取了",Toast.LENGTH_SHORT).show();
+    }
+    @PermissionFail(requestCode = 100)
+    private void test2(){
+        Toast.makeText(this,"没有获取",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionGen.onRequestPermissionsResult(this,requestCode,permissions,grantResults);
+    }
+}
+
+在grlde中配置:
+dependencies {
+      compile 'com.lovedise:permissiongen:0.0.6'
+}
