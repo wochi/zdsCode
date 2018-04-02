@@ -1,0 +1,11 @@
+这是关于手机连接网络之后，是如何通过硬件设备进行通讯的，首先手机网络分为三个过程，
+1：standby状态，指的的空闲的状态。2：lowPower状态，还没有完全链接的网络状态  3：fullPower状态，指的是全能量的状态，此为网络连接最好的状态；
+但是无线是最耗用手机电池的电，
+
+从standby状态，指的的空闲的状态==》lowPower==》fullPower 完成一次网络请求，从standby到fullpower要用1.5s的时间，从lowPower到fullpower
+要1.5s的拖尾时间。
+
+实际上，这意味着一个每18秒传输1秒非捆绑数据（unbundled data）的 app，会一直保持激活状态（18 = 1秒的传输数据 + 5秒过渡时间回到 low power + 12秒过
+渡时间回到standby）。因此，每分钟会消耗18秒 high power 的电量，42秒 low power 的电量。
+
+通过比较，同一个 app，每分钟传输持续3秒的捆绑数据（bundle data），会使得无线电波持续在 high power 状态仅仅8秒，在 low power 状态仅仅12秒钟。
