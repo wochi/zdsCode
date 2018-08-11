@@ -12,3 +12,12 @@ onbackpressed: 官方文档解释是  ：
     处于fragmentactivity层，他是和fragment相关，当在activity中使用fragment时倾向使用onbackpressed,可以让附在activity上的fragment出栈。
     
     finish: 结束当前的活动和指定是否删除与此活动有关联的任务。位于activity中的。
+    
+    
+    对windowmannger的理解；windowmannger继承ViewMannger,ViewMannger作为一个接口，里面提供了三个方法分别为：
+    
+       public void addView(View view, ViewGroup.LayoutParams params);//添加view
+        public void updateViewLayout(View view, ViewGroup.LayoutParams params);//更新view
+        public void removeView(View view);//移除view
+        
+    adb shell am display-size 获取当前屏幕的尺寸
