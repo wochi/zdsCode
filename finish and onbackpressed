@@ -21,3 +21,6 @@ onbackpressed: 官方文档解释是  ：
         public void removeView(View view);//移除view
         
     adb shell am display-size 获取当前屏幕的尺寸
+    
+   安卓开发者官网：
+    https://developer.android.google.cn/topic/libraries/architecture/
