@@ -1,0 +1,73 @@
+Intent intent = new Intent(this,class.java);
+stratActivity(intent);
+stratActivity有好几种重载的方法，但是最终都会调用startactivityForresult()方法；
+源码的第一步
+@Override
+    public void startActivity(Intent intent) {
+        this.startActivity(intent, null);
+    }
+第二步：@Override
+    public void startActivity(Intent intent, @Nullable Bundle options) {
+        if (options != null) {
+            startActivityForResult(intent, -1, options);//options 就是传得参数
+        } else {
+            // Note we want to go through this call for compatibility with
+            // applications that may have overridden the method.
+            startActivityForResult(intent, -1);
+        }
+    }
+    第三步：public void startActivityForResult(@RequiresPermission Intent intent, int requestCode,
+            @Nullable Bundle options) {
+        if (mParent == null) { //mParent代表activitygroup
+            options = transferSpringboardActivityOptions(options);
+            Instrumentation.ActivityResult ar = 
+                mInstrumentation.execStartActivity(    //mInstrumentation.execStartActivity  查看源码，启动activity的真正实现由ActivityManager.getService()
+                //.startActivity（）方法来启动的。
+                
+                    this, mMainThread.getApplicationThread(), mToken, this,
+                    intent, requestCode, options);
+            if (ar != null) {
+                mMainThread.sendActivityResult(
+                    mToken, mEmbeddedID, requestCode, ar.getResultCode(),
+                    ar.getResultData());
+            }
+            if (requestCode >= 0) {
+                // If this start is requesting a result, we can avoid making
+                // the activity visible until the result is received.  Setting
+                // this code during onCreate(Bundle savedInstanceState) or onResume() will keep the
+                // activity hidden during this time, to avoid flickering.
+                // This can only be done when a result is requested because
+                // that guarantees we will get information back when the
+                // activity is finished, no matter what happens to it.
+                mStartedActivity = true;
+            }
+
+            cancelInputsAndStartExitTransition(options);
+            // TODO Consider clearing/flushing other event sources and events for child windows.
+        } else {
+            if (options != null) {
+                mParent.startActivityFromChild(this, intent, requestCode, options);
+            } else {
+                // Note we want to go through this method for compatibility with
+                // existing applications that may have overridden it.
+                mParent.startActivityFromChild(this, intent, requestCode);
+            }
+        }
+    }
+    4、AMS这个Binder这个对象采用单例的模式对外提供，静态的内部单例防止多线程出现问题；在第一次调用它的get方法的时，
+    他会通过create方法初始化AMS的Binder对象。
+    public static IActivityManager getService() {
+        return IActivityManagerSingleton.get();
+    }
+
+    private static final Singleton<IActivityManager> IActivityManagerSingleton =
+            new Singleton<IActivityManager>() {
+                @Override
+                protected IActivityManager create() {
+                    final IBinder b = ServiceManager.getService(Context.ACTIVITY_SERVICE);
+                    final IActivityManager am = IActivityManager.Stub.asInterface(b);
+                    return am;
+                }
+            };
+
+    
